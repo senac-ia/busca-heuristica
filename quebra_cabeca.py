@@ -75,11 +75,19 @@ class QuebraCabeca:
     resultado = ["1", "2", "3", "4", "5", "6", "7", "8", "_"]
     return sum(1 for i in range(len(resultado)) if resultado[i] == estado[i])
 
+  def custo(self, estado_origem, estado_destino):
+    return 1
+
 
 q = QuebraCabeca()
 estado_inicial = q.iniciar()
 
-no_solucao = a_estrela(estado_inicial, q.testar_objetivo, q.gerar_sucessores, q.heuristica, q.imprimir)
+no_solucao = a_estrela(estado_inicial, 
+                      q.testar_objetivo, 
+                      q.gerar_sucessores, 
+                      q.heuristica,
+                      q.custo,
+                      q.imprimir)
 
 print("Estado Inicial:")
 print(q.imprimir(estado_inicial))

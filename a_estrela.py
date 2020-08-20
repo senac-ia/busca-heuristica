@@ -2,9 +2,9 @@ from no import No
 from aux import imprime_atual, imprime_atual, imprime_sucessores
 import heapq
 
-def a_estrela(estado_inicial, testar_objetivo, gerar_sucessores, heuristica, imprimir=str, stepEstado=False, stepSucessores=False):
+def a_estrela(estado_inicial, testar_objetivo, gerar_sucessores, heuristica, custo, imprimir=str, stepEstado=False, stepSucessores=False):
   fila = FilaPrioridade()
-  fila.push(No(estado_inicial, None, None, 00, heuristica(estado_inicial)))
+  fila.push(No(estado_inicial, None, None, 0.0, heuristica(estado_inicial)))
   visitados = {estado_inicial: 0.0} # Dicionario do Python
 
   while not fila.esta_vazio():
@@ -24,9 +24,9 @@ def a_estrela(estado_inicial, testar_objetivo, gerar_sucessores, heuristica, imp
     if stepSucessores: imprime_sucessores(estados_vertices_sucessores, imprimir)
 
     for estados_vertices_sucessor in estados_vertices_sucessores:
-      novo_custo = no_atual.custo + 1
       estado_filho = estados_vertices_sucessor[0]
       vertice = estados_vertices_sucessor[1]
+      novo_custo = no_atual.custo + custo(estado_atual, estado_filho)
       if estado_filho not in visitados or visitados[estado_filho] > novo_custo: # pula estado_filho se já foi expandido
         visitados[estado_filho] = novo_custo
         fila.push(No(estado_filho, no_atual, vertice, novo_custo, heuristica(estado_filho)))
