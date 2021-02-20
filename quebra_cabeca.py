@@ -71,31 +71,55 @@ class QuebraCabeca:
       sucessor[posicao + 1] = "_"
       return (tuple(sucessor), "➡️")
   
+  # Heurística 1: Checar se os valores 
+  # esta heurística não é admissível, pois, pode dificultar 
+  # a chegada de um resultado final
   def heuristica(self, estado):
     resultado = ["1", "2", "3", "4", "5", "6", "7", "8", "_"]
     return sum(1 for i in range(len(resultado)) if resultado[i] == estado[i])
 
+  # Heurística 2: distância de Manhattan
+  # Distância de Manhattan: d = |xi-xj| + |yi-yj|
+  # Heurística adminissível, pois, sempre o resultado chega mais perto
+  def heuristica2(self, estado):
+    resultado = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "_"]]
+    estado_matriz = [estado[0:3], estado[3:6], estado[6:9]]
+
+    soma = 0
+
+    for i in range(len(resultado)):
+      for j in range(len(resultado[i])):
+        valor = resultado[i][j]
+        soma = soma + self.distancia_manhattan(valor, estado_matriz, i, j)
+
+    return soma
+
+  def distancia_manhattan(self, valor, estado, i, j):
+    for k in range(len(estado)):
+      for h in range(len(estado[k])):
+        if valor == estado[k][h]: return abs(i-k)+abs(j-h)
+
   def custo(self, estado_origem, estado_destino):
     return 1
 
+if __name__ == "__main__":
+  q = QuebraCabeca()
+  estado_inicial = q.iniciar()
 
-q = QuebraCabeca()
-estado_inicial = q.iniciar()
+  no_solucao = a_estrela(estado_inicial, 
+                        q.testar_objetivo, 
+                        q.gerar_sucessores, 
+                        q.heuristica2,
+                        q.custo,
+                        q.imprimir)
 
-no_solucao = a_estrela(estado_inicial, 
-                      q.testar_objetivo, 
-                      q.gerar_sucessores, 
-                      q.heuristica,
-                      q.custo,
-                      q.imprimir)
+  print("Estado Inicial:")
+  print(q.imprimir(estado_inicial))
 
-print("Estado Inicial:")
-print(q.imprimir(estado_inicial))
-
-if(no_solucao is None):
-  print("Não houve solução ao problema")
-else:
-  print("Solução:")
-  #caminho = no_caminho(no_solucao)
-  caminho = vertice_caminho(no_solucao)
-  print(caminho)
+  if(no_solucao is None):
+    print("Não houve solução ao problema")
+  else:
+    print("Solução:")
+    #caminho = no_caminho(no_solucao)
+    caminho = vertice_caminho(no_solucao)
+    print(caminho)
