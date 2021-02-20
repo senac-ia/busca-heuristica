@@ -11,13 +11,20 @@ class QuebraCabeca:
     random.shuffle(lista_inicial)
     return tuple(lista_inicial)
 
+  # Função auxiliar para imprimir no formato:
+  # | 3 | 7 | 2 |
+  # | _ | 4 | 5 |
+  # | 8 | 1 | 6 |
   def imprimir(self, estado):
     return "| " + estado[0] + " | " + estado[1] + " | " + estado[2] + " |\n| " + estado[3] + " | " + estado[4] + " | " + estado[5] + " |\n| " + estado[6] + " | " + estado[7] + " | " + estado[8] + " |"
 
+  # Função booleana que verifica se o estado atual
+  # é o estado objetivo do problema
   def testar_objetivo(self, estado):
     return estado == ("1", "2", "3", "4", "5", "6", "7", "8", "_")
 
-  # movimento do quadrado vazio
+  # Função que gera os sucessores válidos 
+  # a partir de um estado válido
   def gerar_sucessores(self, estado):
     sucessores = []
 
@@ -78,9 +85,9 @@ class QuebraCabeca:
     resultado = ["1", "2", "3", "4", "5", "6", "7", "8", "_"]
     return sum(1 for i in range(len(resultado)) if resultado[i] == estado[i])
 
-  # Heurística 2: distância de Manhattan
-  # Distância de Manhattan: d = |xi-xj| + |yi-yj|
+  # Heurística 2: Distância para o resultado espero
   # Heurística adminissível, pois, sempre o resultado chega mais perto
+  # Transformei o array em matriz para fazer cálculo de distância
   def heuristica2(self, estado):
     resultado = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "_"]]
     estado_matriz = [estado[0:3], estado[3:6], estado[6:9]]
@@ -94,11 +101,15 @@ class QuebraCabeca:
 
     return soma
 
+  # Distância de Manhattan: d = |xi-xj| + |yi-yj|
   def distancia_manhattan(self, valor, estado, i, j):
     for k in range(len(estado)):
       for h in range(len(estado[k])):
         if valor == estado[k][h]: return abs(i-k)+abs(j-h)
-
+    
+  # Função de custo: Quando custa mover de um 
+  # estado_origem para estado_destino. No Quebra Cabeça 
+  # de 8, este custo é fixo e arbitrariamente será 1.
   def custo(self, estado_origem, estado_destino):
     return 1
 
